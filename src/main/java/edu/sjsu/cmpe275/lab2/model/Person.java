@@ -9,7 +9,7 @@ public class Person {
     private String email;
     private String description;
     private Address address;
-    private Organization org;
+    private Organization organization;
     private ArrayList<Person> friends;
 
 
@@ -67,12 +67,12 @@ public class Person {
         this.address = address;
     }
 
-    public Organization getOrg() {
-        return org;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setOrg(Organization org) {
-        this.org = org;
+    public void setOrganization(Organization org) {
+        this.organization = org;
     }
 
     public ArrayList<Person> getFriends() {
