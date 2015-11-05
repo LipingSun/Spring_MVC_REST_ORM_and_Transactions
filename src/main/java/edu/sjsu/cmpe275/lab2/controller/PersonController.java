@@ -1,8 +1,8 @@
 package edu.sjsu.cmpe275.lab2.controller;
 
-import edu.sjsu.cmpe275.lab2.model.Address;
-import edu.sjsu.cmpe275.lab2.model.Organization;
-import edu.sjsu.cmpe275.lab2.model.Person;
+import edu.sjsu.cmpe275.lab2.domain.Address;
+import edu.sjsu.cmpe275.lab2.domain.Organization;
+import edu.sjsu.cmpe275.lab2.domain.Person;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
