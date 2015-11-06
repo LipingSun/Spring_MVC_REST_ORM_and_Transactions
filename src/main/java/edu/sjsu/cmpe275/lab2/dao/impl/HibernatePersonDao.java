@@ -1,7 +1,7 @@
 package edu.sjsu.cmpe275.lab2.dao.impl;
 
-import edu.sjsu.cmpe275.lab2.domain.Person;
 import edu.sjsu.cmpe275.lab2.dao.PersonDao;
+import edu.sjsu.cmpe275.lab2.domain.Person;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,9 +10,6 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 
-/**
- * Created by jianxin on 10/30/15.
- */
 public class HibernatePersonDao implements PersonDao {
 
     private SessionFactory sessionFactory;
