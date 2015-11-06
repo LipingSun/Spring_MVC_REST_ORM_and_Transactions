@@ -4,7 +4,7 @@ USE `CMPE275LAB2`;
 
 DROP TABLE IF EXISTS `ORGANIZATION`;
 CREATE TABLE `ORGANIZATION` (
-  `org_id` int(11) NOT NULL,
+  `org_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `description` varchar(45) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE `ORGANIZATION` (
 
 DROP TABLE IF EXISTS `PERSON`;
 CREATE TABLE `PERSON` (
-  `person_id` int(11) NOT NULL,
+  `person_id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(45) DEFAULT NULL,
   `lastname` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
