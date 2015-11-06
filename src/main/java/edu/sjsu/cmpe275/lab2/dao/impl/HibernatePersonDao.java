@@ -41,7 +41,7 @@ public class HibernatePersonDao implements PersonDao {
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Person person = (Person) session.get(Person.class, personId);
+            Person person = session.get(Person.class, personId);
             session.delete(person);
             tx.commit();
         }catch(RuntimeException e){
@@ -56,7 +56,7 @@ public class HibernatePersonDao implements PersonDao {
     public Person findById(long personId) {
         Session session = sessionFactory.openSession();
         try{
-            return (Person) session.get(Person.class, personId);
+            return session.get(Person.class, personId);
         }finally {
             session.close();
         }
