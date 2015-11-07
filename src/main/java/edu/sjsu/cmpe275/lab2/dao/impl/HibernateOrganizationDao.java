@@ -35,22 +35,22 @@ public class HibernateOrganizationDao implements OrganizationDao {
         }
     }
 
-    public Organization update(Organization org) {
+    public Organization update(Organization orgChanges) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Organization organization = session.get(Organization.class, org.getId());
-            organization.setName(org.getName());
-            if (org.getDescription() != null) {
-                organization.setDescription(org.getDescription());
+            Organization org = session.get(Organization.class, orgChanges.getId());
+            org.setName(orgChanges.getName());
+            if (orgChanges.getDescription() != null) {
+                org.setDescription(orgChanges.getDescription());
             }
-            if (org.getAddress() != null) {
-                organization.setAddress(org.getAddress());
+            if (orgChanges.getAddress() != null) {
+                org.setAddress(orgChanges.getAddress());
             }
-            session.update(organization);
+            session.update(org);
             tx.commit();
-            return organization;
+            return org;
         }catch(RuntimeException e){
             tx.rollback();
             throw e;
