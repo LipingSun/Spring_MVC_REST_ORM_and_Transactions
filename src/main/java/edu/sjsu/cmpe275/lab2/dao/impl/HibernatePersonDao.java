@@ -89,6 +89,13 @@ public class HibernatePersonDao implements PersonDao {
         try{
             tx.begin();
             Person person = session.get(Person.class, personId);
+            List<Person> friends = person.getFriends();
+            for (Person friend : friends) {
+                friends.remove(friend);
+                friend.getFriends().remove(person);
+                session.update(friend);
+            }
+            session.update(person);
             session.delete(person);
             tx.commit();
         }catch(RuntimeException e){
