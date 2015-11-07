@@ -1,6 +1,6 @@
 package edu.sjsu.cmpe275.lab2.controller;
 
-import edu.sjsu.cmpe275.lab2.dao.impl.HibernateOrganizationDao;
+import edu.sjsu.cmpe275.lab2.dao.PersonDao;
 import edu.sjsu.cmpe275.lab2.dao.impl.HibernatePersonDao;
 import edu.sjsu.cmpe275.lab2.domain.Address;
 import edu.sjsu.cmpe275.lab2.domain.Organization;
@@ -18,12 +18,10 @@ import java.util.Map;
 @Controller
 public class PersonController {
 
-    private HibernatePersonDao hibernatePersonDao;
-    private HibernateOrganizationDao hibernateOrganizationDao;
+    private PersonDao personDao;
 
     public PersonController() {
-        hibernatePersonDao = new HibernatePersonDao();
-        hibernateOrganizationDao = new HibernateOrganizationDao();
+        personDao = new HibernatePersonDao();
     }
 
 
@@ -46,17 +44,17 @@ public class PersonController {
             person.setAddress(address);
         }
         if (params.containsKey("organization")) {
-            Organization org = hibernateOrganizationDao.findById(Long.parseLong(params.get("organization")));
-            if (org != null) {
-                person.setOrganization(org);
-            } else {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
+            Organization org = new Organization();
+            org.setId(Long.parseLong(params.get("organization")));
+            person.setOrganization(org);
         }
 
-        hibernatePersonDao.store(person);
-
-        return new ResponseEntity<>(person, HttpStatus.OK);
+        try {
+            personDao.store(person);
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     /* ---------------------------------------------- Get a person ---------------------------------------------- */
@@ -64,7 +62,7 @@ public class PersonController {
     @ResponseBody
     public ResponseEntity<?> getPersonJSON(@PathVariable("id") long userId) {
         try {
-            Person person = hibernatePersonDao.findById(userId);
+            Person person = personDao.findById(userId);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -75,7 +73,7 @@ public class PersonController {
     @ResponseBody
     public ResponseEntity<?> getPersonXML(@PathVariable("id") long userId) {
         try {
-            Person person = hibernatePersonDao.findById(userId);
+            Person person = personDao.findById(userId);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -85,7 +83,7 @@ public class PersonController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET, params = "format=html")
     public String getPersonHTML(@PathVariable("id") long userId, Model model) {
         try {
-            Person person = hibernatePersonDao.findById(userId);
+            Person person = personDao.findById(userId);
             model.addAttribute("firstName", person.getFirstname());
             model.addAttribute("lastName", person.getLastname());
             model.addAttribute("email", person.getEmail());
@@ -107,11 +105,10 @@ public class PersonController {
     @RequestMapping(value = "{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updatePerson(@PathVariable("id") long userId,
-                                          @RequestParam("firstname") String firstName,
-                                          @RequestParam("lastname") String lastName,
                                           @RequestParam("email") String email,
                                           @RequestParam Map<String,String> params) {
-        Person person = new Person(firstName, lastName, email);
+        Person person = new Person();
+        person.setEmail(email);
         person.setId(userId);
         person.setDescription(params.get("description"));
         if (params.containsKey("friends")) {
@@ -123,18 +120,20 @@ public class PersonController {
                     params.get("state"), params.get("zip"));
             person.setAddress(address);
         }
+
         if (params.containsKey("organization")) {
-            Organization org = hibernateOrganizationDao.findById(Long.parseLong(params.get("organization")));
-            if (org != null) {
-                person.setOrganization(org);
-            } else {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
+            Organization org = new Organization();
+            org.setId(Long.parseLong(params.get("organization")));
+            person.setOrganization(org);
         }
 
-        Person updatedPerson = hibernatePersonDao.update(person);
+        try {
+            Person updatedPerson = personDao.update(person);
+            return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
     }
 
     /* ---------------------------------------------- Delete a person ---------------------------------------------- */
@@ -142,7 +141,7 @@ public class PersonController {
     @ResponseBody
     public ResponseEntity<?> deletePerson(@PathVariable("id") long userId) {
         try {
-            hibernatePersonDao.delete(userId);
+            personDao.delete(userId);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
