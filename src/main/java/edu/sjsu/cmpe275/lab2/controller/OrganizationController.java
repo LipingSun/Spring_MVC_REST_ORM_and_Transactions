@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.lab2.controller;
 
+import edu.sjsu.cmpe275.lab2.dao.OrganizationDao;
 import edu.sjsu.cmpe275.lab2.dao.impl.HibernateOrganizationDao;
 import edu.sjsu.cmpe275.lab2.domain.Address;
 import edu.sjsu.cmpe275.lab2.domain.Organization;
@@ -16,10 +17,10 @@ import java.util.Map;
 @Controller
 public class OrganizationController {
 
-    private HibernateOrganizationDao hibernateOrganizationDao;
+    private OrganizationDao organizationDao;
 
     public OrganizationController() {
-        hibernateOrganizationDao = new HibernateOrganizationDao();
+        organizationDao = new HibernateOrganizationDao();
     }
 
     /* -------------------------------------------- Create a org -------------------------------------------- */
@@ -36,7 +37,7 @@ public class OrganizationController {
             org.setAddress(address);
         }
 
-        hibernateOrganizationDao.store(org);
+        organizationDao.store(org);
 
         return new ResponseEntity<>(org, HttpStatus.OK);
     }
@@ -46,7 +47,7 @@ public class OrganizationController {
     @ResponseBody
     public ResponseEntity<?> getOrganizationJSON(@PathVariable("id") long orgId) {
         try {
-            Organization org = hibernateOrganizationDao.findById(orgId);
+            Organization org = organizationDao.findById(orgId);
             return new ResponseEntity<>(org, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -57,7 +58,7 @@ public class OrganizationController {
     @ResponseBody
     public ResponseEntity<?> getOrganizationXML(@PathVariable("id") long orgId) {
         try {
-            Organization org = hibernateOrganizationDao.findById(orgId);
+            Organization org = organizationDao.findById(orgId);
             return new ResponseEntity<>(org, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -67,7 +68,7 @@ public class OrganizationController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET, params = "format=html")
     public String getOrganizationHTML(@PathVariable("id") long orgId, Model model) {
         try {
-            Organization org = hibernateOrganizationDao.findById(orgId);
+            Organization org = organizationDao.findById(orgId);
             model.addAttribute("name", org.getName());
             model.addAttribute("description", org.getDescription());
             model.addAttribute("address", org.getAddressString());
@@ -95,7 +96,7 @@ public class OrganizationController {
             org.setAddress(address);
         }
 
-        Organization updatedOrg = hibernateOrganizationDao.update(org);
+        Organization updatedOrg = organizationDao.update(org);
 
         return new ResponseEntity<>(updatedOrg, HttpStatus.OK);
     }
@@ -105,7 +106,7 @@ public class OrganizationController {
     @ResponseBody
     public ResponseEntity<?> deleteOrganization(@PathVariable("id") long orgId) {
         try {
-            hibernateOrganizationDao.delete(orgId);
+            organizationDao.delete(orgId);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage().equals("ORG_NOT_EMPTY")) {

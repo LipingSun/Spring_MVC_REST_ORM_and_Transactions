@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.lab2.controller;
 
+import edu.sjsu.cmpe275.lab2.dao.FriendshipDao;
 import edu.sjsu.cmpe275.lab2.dao.impl.HibernateFriendshipDao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class FriendshipController {
 
-    private HibernateFriendshipDao hibernateFriendshipDao;
+    private FriendshipDao friendshipDao;
 
     public FriendshipController() {
-        hibernateFriendshipDao = new HibernateFriendshipDao();
+        friendshipDao = new HibernateFriendshipDao();
     }
 
     /* ----------------------------------------------- Add a friend ----------------------------------------------- */
@@ -24,7 +25,7 @@ public class FriendshipController {
     @ResponseBody
     public ResponseEntity<?> addFriends(@PathVariable("id1") long userId1, @PathVariable("id2") long userId2) {
         try {
-            hibernateFriendshipDao.create(userId1, userId2);
+            friendshipDao.create(userId1, userId2);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -36,7 +37,7 @@ public class FriendshipController {
     @ResponseBody
     public ResponseEntity<?> removeFriends(@PathVariable("id1") long userId1, @PathVariable("id2") long userId2) {
         try {
-            hibernateFriendshipDao.delete(userId1, userId2);
+            friendshipDao.delete(userId1, userId2);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
