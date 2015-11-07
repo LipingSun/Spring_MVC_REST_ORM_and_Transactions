@@ -31,7 +31,7 @@ public class Person {
     private Address address;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="org_id")
+    @JoinColumn(name = "org_id")
     private Organization org;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -133,8 +133,23 @@ public class Person {
         this.org = org;
     }
 
+    @JsonIgnore
     public List<Person> getFriends() {
         return friends;
+    }
+
+    @JsonProperty(value = "friends")
+    public String getFriendsString() {
+        if (!friends.isEmpty()) {
+            String str = "";
+            for (Person friend : friends) {
+                str = str + friend.getFirstname() + " " + friend.getLastname() + ", ";
+            }
+            str = str.substring(0, str.length() - 2);
+            return str;
+        } else {
+            return null;
+        }
     }
 
     public void setFriends(List<Person> friends) {

@@ -92,7 +92,7 @@ public class PersonController {
             model.addAttribute("orgName", person.getOrganization().getName());
             model.addAttribute("orgDescription", person.getOrganization().getDescription());
             model.addAttribute("orgAddress", person.getOrganization().getAddressString());
-            // TODO friends
+            model.addAttribute("friends", person.getFriendsString());
             return "person";
         } catch (Exception e) {
             model.addAttribute("errorCode", 404);
