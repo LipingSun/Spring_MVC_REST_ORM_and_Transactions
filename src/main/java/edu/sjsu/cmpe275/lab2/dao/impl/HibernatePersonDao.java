@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe275.lab2.dao.impl;
 
 import edu.sjsu.cmpe275.lab2.dao.PersonDao;
+import edu.sjsu.cmpe275.lab2.domain.Organization;
 import edu.sjsu.cmpe275.lab2.domain.Person;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -25,6 +26,14 @@ public class HibernatePersonDao implements PersonDao {
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
+            if (person.getOrganization() != null) {
+                Organization org = session.get(Organization.class, person.getOrganization().getId());
+                if (org != null) {
+                    person.setOrganization(org);
+                } else {
+                    throw new RuntimeException();
+                }
+            }
             session.save(person);
             tx.commit();
         }catch(RuntimeException e){
@@ -55,9 +64,13 @@ public class HibernatePersonDao implements PersonDao {
                 person.setAddress(personChanges.getAddress());
             }
             if (personChanges.getOrganization() != null) {
-                person.setOrganization(personChanges.getOrganization());
+                Organization org = session.get(Organization.class, personChanges.getOrganization().getId());
+                if (org != null) {
+                    person.setOrganization(org);
+                } else {
+                    throw new RuntimeException();
+                }
             }
-
             session.update(person);
             tx.commit();
             return person;
