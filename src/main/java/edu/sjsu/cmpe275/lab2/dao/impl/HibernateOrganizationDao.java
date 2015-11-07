@@ -1,7 +1,7 @@
 package edu.sjsu.cmpe275.lab2.dao.impl;
 
-import edu.sjsu.cmpe275.lab2.domain.Organization;
 import edu.sjsu.cmpe275.lab2.dao.OrganizationDao;
+import edu.sjsu.cmpe275.lab2.domain.Organization;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,9 +10,6 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 
-/**
- * Created by jianxin on 10/30/15.
- */
 public class HibernateOrganizationDao implements OrganizationDao {
 
     private SessionFactory sessionFactory;
@@ -28,8 +25,32 @@ public class HibernateOrganizationDao implements OrganizationDao {
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            session.saveOrUpdate(organization);
+            session.save(organization);
             tx.commit();
+        }catch(RuntimeException e){
+            tx.rollback();
+            throw e;
+        }finally {
+            session.close();
+        }
+    }
+
+    public Organization update(Organization org) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.getTransaction();
+        try{
+            tx.begin();
+            Organization organization = session.get(Organization.class, org.getId());
+            organization.setName(org.getName());
+            if (org.getDescription() != null) {
+                organization.setDescription(org.getDescription());
+            }
+            if (org.getAddress() != null) {
+                organization.setAddress(org.getAddress());
+            }
+            session.update(organization);
+            tx.commit();
+            return organization;
         }catch(RuntimeException e){
             tx.rollback();
             throw e;
@@ -44,7 +65,7 @@ public class HibernateOrganizationDao implements OrganizationDao {
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Organization organization = (Organization) session.get(Organization.class, orgId);
+            Organization organization = session.get(Organization.class, orgId);
             session.delete(organization);
             tx.commit();
         }catch(RuntimeException e){
@@ -59,7 +80,7 @@ public class HibernateOrganizationDao implements OrganizationDao {
     public Organization findById(long orgId) {
         Session session = sessionFactory.openSession();
         try{
-            return (Organization) session.get(Organization.class, orgId);
+            return session.get(Organization.class, orgId);
         }finally {
             session.close();
         }

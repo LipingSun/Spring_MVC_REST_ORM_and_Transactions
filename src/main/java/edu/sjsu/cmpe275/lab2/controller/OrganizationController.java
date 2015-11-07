@@ -70,7 +70,7 @@ public class OrganizationController {
             Organization org = hibernateOrganizationDao.findById(orgId);
             model.addAttribute("name", org.getName());
             model.addAttribute("description", org.getDescription());
-            model.addAttribute("address", org.getAddress());
+            model.addAttribute("address", org.getAddressString());
             return "organization";
         } catch (Exception e) {
             model.addAttribute("errorCode", 404);
@@ -95,9 +95,9 @@ public class OrganizationController {
             org.setAddress(address);
         }
 
-        hibernateOrganizationDao.store(org);
+        Organization updatedOrg = hibernateOrganizationDao.update(org);
 
-        return new ResponseEntity<>(org, HttpStatus.OK);
+        return new ResponseEntity<>(updatedOrg, HttpStatus.OK);
     }
 
     /* ---------------------------------------------- Delete a org ---------------------------------------------- */
