@@ -25,8 +25,42 @@ public class HibernatePersonDao implements PersonDao {
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            session.saveOrUpdate(person);
+            session.save(person);
             tx.commit();
+        }catch(RuntimeException e){
+            tx.rollback();
+            throw e;
+        }finally {
+            session.close();
+        }
+    }
+
+    public Person update(Person personChanges) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.getTransaction();
+        try{
+            tx.begin();
+            Person person = session.get(Person.class, personChanges.getId());
+            person.setEmail(personChanges.getEmail());
+            if (personChanges.getFirstname() != null) {
+                person.setFirstname(personChanges.getFirstname());
+            }
+            if (personChanges.getLastname() != null) {
+                person.setLastname(personChanges.getLastname());
+            }
+            if (personChanges.getDescription() != null) {
+                person.setDescription(personChanges.getDescription());
+            }
+            if (personChanges.getAddress() != null) {
+                person.setAddress(personChanges.getAddress());
+            }
+            if (personChanges.getOrganization() != null) {
+                person.setOrganization(personChanges.getOrganization());
+            }
+
+            session.update(person);
+            tx.commit();
+            return person;
         }catch(RuntimeException e){
             tx.rollback();
             throw e;
