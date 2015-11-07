@@ -24,7 +24,7 @@ public class HibernatePersonDao implements PersonDao {
     public void store(Person person) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.getTransaction();
-        try{
+        try {
             tx.begin();
             if (person.getOrganization() != null) {
                 Organization org = session.get(Organization.class, person.getOrganization().getId());
@@ -36,10 +36,10 @@ public class HibernatePersonDao implements PersonDao {
             }
             session.save(person);
             tx.commit();
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             tx.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
     }
@@ -47,7 +47,7 @@ public class HibernatePersonDao implements PersonDao {
     public Person update(Person personChanges) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.getTransaction();
-        try{
+        try {
             tx.begin();
             Person person = session.get(Person.class, personChanges.getId());
             person.setEmail(personChanges.getEmail());
@@ -74,10 +74,10 @@ public class HibernatePersonDao implements PersonDao {
             session.update(person);
             tx.commit();
             return person;
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             tx.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
     }
@@ -86,7 +86,7 @@ public class HibernatePersonDao implements PersonDao {
     public void delete(long personId) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.getTransaction();
-        try{
+        try {
             tx.begin();
             Person person = session.get(Person.class, personId);
             List<Person> friends = person.getFriends();
@@ -98,10 +98,10 @@ public class HibernatePersonDao implements PersonDao {
             session.update(person);
             session.delete(person);
             tx.commit();
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             tx.rollback();
             throw e;
-        }finally {
+        } finally {
             session.close();
         }
     }
@@ -109,9 +109,9 @@ public class HibernatePersonDao implements PersonDao {
     @Override
     public Person findById(long personId) {
         Session session = sessionFactory.openSession();
-        try{
+        try {
             return session.get(Person.class, personId);
-        }finally {
+        } finally {
             session.close();
         }
     }
@@ -119,10 +119,10 @@ public class HibernatePersonDao implements PersonDao {
     @Override
     public List<Person> findAll() {
         Session session = sessionFactory.openSession();
-        try{
+        try {
             Query query = session.createQuery("from Person");
             return query.list();
-        }finally {
+        } finally {
             session.close();
         }
     }

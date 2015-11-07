@@ -31,7 +31,7 @@ public class PersonController {
     public ResponseEntity<?> createPerson(@RequestParam("firstname") String firstName,
                                           @RequestParam("lastname") String lastName,
                                           @RequestParam("email") String email,
-                                          @RequestParam Map<String,String> params) {
+                                          @RequestParam Map<String, String> params) {
         Person person = new Person(firstName, lastName, email);
         person.setDescription(params.get("description"));
         if (params.containsKey("friends")) {
@@ -106,7 +106,7 @@ public class PersonController {
     @ResponseBody
     public ResponseEntity<?> updatePerson(@PathVariable("id") long userId,
                                           @RequestParam("email") String email,
-                                          @RequestParam Map<String,String> params) {
+                                          @RequestParam Map<String, String> params) {
         Person person = new Person();
         person.setEmail(email);
         person.setId(userId);

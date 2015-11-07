@@ -27,7 +27,7 @@ public class OrganizationController {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createOrganization(@RequestParam("name") String name,
-                                          @RequestParam Map<String,String> params) {
+                                                @RequestParam Map<String, String> params) {
         Organization org = new Organization(name);
         org.setDescription(params.get("description"));
         if (params.containsKey("street") && params.containsKey("city") &&
@@ -84,8 +84,8 @@ public class OrganizationController {
     @RequestMapping(value = "{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateOrganization(@PathVariable("id") long orgId,
-                                          @RequestParam("name") String name,
-                                          @RequestParam Map<String,String> params) {
+                                                @RequestParam("name") String name,
+                                                @RequestParam Map<String, String> params) {
         Organization org = new Organization(name);
         org.setId(orgId);
         org.setDescription(params.get("description"));

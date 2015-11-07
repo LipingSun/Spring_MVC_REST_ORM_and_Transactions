@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface OrganizationDao {
     void store(Organization organization);
+
     void delete(long orgId);
+
     Organization findById(long orgId);
+
     Organization update(Organization org);
+
     List<Organization> findAll();
 }
