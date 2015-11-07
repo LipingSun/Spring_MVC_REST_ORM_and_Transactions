@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Liping on 11/6/15.
- */
 public class HibernateOrganizationDaoTest {
 
     private HibernateOrganizationDao hibernateOrganizationDao;
@@ -17,6 +14,7 @@ public class HibernateOrganizationDaoTest {
     public HibernateOrganizationDaoTest() {
         hibernateOrganizationDao = new HibernateOrganizationDao();
     }
+
     @Test
     public void testStore() throws Exception {
         Address address = new Address("street", "city", "state", "95555");
