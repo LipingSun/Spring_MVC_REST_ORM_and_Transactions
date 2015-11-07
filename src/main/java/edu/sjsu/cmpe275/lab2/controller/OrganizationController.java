@@ -106,7 +106,7 @@ public class OrganizationController {
     public ResponseEntity<?> deleteOrganization(@PathVariable("id") long orgId) {
         try {
             hibernateOrganizationDao.delete(orgId);
-            return new ResponseEntity<>("null", HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
