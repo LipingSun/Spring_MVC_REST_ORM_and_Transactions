@@ -108,6 +108,9 @@ public class OrganizationController {
             hibernateOrganizationDao.delete(orgId);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
+            if (e.getMessage().equals("ORG_NOT_EMPTY")) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }

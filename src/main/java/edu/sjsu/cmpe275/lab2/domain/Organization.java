@@ -84,4 +84,13 @@ public class Organization {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    @JsonIgnore
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
+    }
 }
