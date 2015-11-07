@@ -137,7 +137,7 @@ public class Person {
         return friends;
     }
 
-    public void setFriends(ArrayList<Person> friends) {
+    public void setFriends(List<Person> friends) {
         this.friends = friends;
     }
 
