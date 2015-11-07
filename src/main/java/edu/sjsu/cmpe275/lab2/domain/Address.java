@@ -1,21 +1,32 @@
-package edu.sjsu.cmpe275.lab2.model;
+package edu.sjsu.cmpe275.lab2.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Address {
+    @Column(name = "street")
     private String street;
+
+    @Column(name = "city")
     private String city;
+
+    @Column(name = "state")
     private String state;
+
+    @Column(name = "zip")
     private String zip;
 
+
+    public Address() {
+
+    }
 
     public Address(String street, String city, String state, String zip) {
         this.street = street;
         this.city = city;
         this.state = state;
         this.zip = zip;
-    }
-
-    public String getAddress() {
-        return this.getStreet() + " " + this.getCity() + " " + this.getState() + " " + this.getZip();
     }
 
     public String getStreet() {
