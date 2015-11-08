@@ -84,7 +84,12 @@ public class HibernateOrganizationDao implements OrganizationDao {
     public Organization findById(long orgId) {
         Session session = sessionFactory.openSession();
         try{
-            return session.get(Organization.class, orgId);
+            Organization org = session.get(Organization.class, orgId);
+            if (org != null) {
+                return org;
+            } else {
+                throw new RuntimeException();
+            }
         }finally {
             session.close();
         }
