@@ -38,7 +38,6 @@ public class OrganizationController {
         }
 
         organizationDao.store(org);
-
         return new ResponseEntity<>(org, HttpStatus.OK);
     }
 
@@ -50,7 +49,10 @@ public class OrganizationController {
             Organization org = organizationDao.findById(orgId);
             return new ResponseEntity<>(org, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            }
+            throw e;
         }
     }
 
@@ -61,7 +63,11 @@ public class OrganizationController {
             Organization org = organizationDao.findById(orgId);
             return new ResponseEntity<>(org, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            } else {
+                throw e;
+            }
         }
     }
 
@@ -74,8 +80,13 @@ public class OrganizationController {
             model.addAttribute("address", org.getAddressString());
             return "organization";
         } catch (Exception e) {
-            model.addAttribute("errorCode", 404);
-            model.addAttribute("errorMessage", e.toString());
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                model.addAttribute("errorCode", 404);
+                model.addAttribute("errorMessage", "ID does not exist");
+            } else {
+                model.addAttribute("errorCode", 500);
+                model.addAttribute("errorMessage", e.toString());
+            }
             return "error";
         }
     }
@@ -96,9 +107,16 @@ public class OrganizationController {
             org.setAddress(address);
         }
 
-        Organization updatedOrg = organizationDao.update(org);
+        try {
+            Organization updatedOrg = organizationDao.update(org);
+            return new ResponseEntity<>(updatedOrg, HttpStatus.OK);
+        } catch (Exception e) {
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            }
+            throw e;
+        }
 
-        return new ResponseEntity<>(updatedOrg, HttpStatus.OK);
     }
 
     /* ---------------------------------------------- Delete an org ---------------------------------------------- */
@@ -106,13 +124,17 @@ public class OrganizationController {
     @ResponseBody
     public ResponseEntity<?> deleteOrganization(@PathVariable("id") long orgId) {
         try {
-            organizationDao.delete(orgId);
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            Organization deletedOrg = organizationDao.delete(orgId);
+            return new ResponseEntity<>(deletedOrg, HttpStatus.OK);
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().equals("ORG_NOT_EMPTY")) {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            if (e.getMessage() != null) {
+                if (e.getMessage().equals("ID_NOT_EXIST")) {
+                    return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                } else if (e.getMessage().equals("ORG_NOT_EMPTY")) {
+                    return new ResponseEntity<>("Organization is not empty", HttpStatus.BAD_REQUEST);
+                }
             }
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            throw e;
         }
     }
 }
