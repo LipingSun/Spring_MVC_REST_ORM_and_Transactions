@@ -41,6 +41,9 @@ public class HibernateOrganizationDao implements OrganizationDao {
         try{
             tx.begin();
             Organization org = session.get(Organization.class, orgChanges.getId());
+            if (org == null) {
+                throw new RuntimeException("ID_NOT_EXIST");
+            }
             org.setName(orgChanges.getName());
             if (orgChanges.getDescription() != null) {
                 org.setDescription(orgChanges.getDescription());
@@ -60,21 +63,21 @@ public class HibernateOrganizationDao implements OrganizationDao {
     }
 
     @Override
-    public void delete(long orgId) {
+    public Organization delete(long orgId) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
             Organization org = session.get(Organization.class, orgId);
             if (org == null) {
-                throw new RuntimeException();
+                throw new RuntimeException("ID_NOT_EXIST");
             }
-            if (org.getPersons().isEmpty()) {
-                session.delete(org);
-            } else {
+            if (!org.getPersons().isEmpty()) {
                 throw new RuntimeException("ORG_NOT_EMPTY");
             }
+            session.delete(org);
             tx.commit();
+            return org;
         }catch(RuntimeException e){
             tx.rollback();
             throw e;
@@ -88,11 +91,10 @@ public class HibernateOrganizationDao implements OrganizationDao {
         Session session = sessionFactory.openSession();
         try{
             Organization org = session.get(Organization.class, orgId);
-            if (org != null) {
-                return org;
-            } else {
-                throw new RuntimeException();
+            if (org == null) {
+                throw new RuntimeException("ID_NOT_EXIST");
             }
+            return org;
         }finally {
             session.close();
         }
