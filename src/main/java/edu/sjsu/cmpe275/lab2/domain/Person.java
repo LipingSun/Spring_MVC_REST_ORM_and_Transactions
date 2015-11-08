@@ -44,6 +44,18 @@ public class Person {
         this.friends = new ArrayList<>();
     }
 
+    public Person(Person person) {
+        this.id = person.getId();
+        this.firstname = person.getFirstname();
+        this.lastname = person.getLastname();
+        this.email = person.getEmail();
+        this.description = person.getDescription();
+        this.address = person.getAddress();
+        this.org = person.getOrganization();
+        this.friends = new ArrayList<>();
+        this.friends.addAll(person.getFriends());
+    }
+
     public Person(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
