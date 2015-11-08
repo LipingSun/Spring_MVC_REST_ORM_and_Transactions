@@ -50,6 +50,9 @@ public class HibernatePersonDao implements PersonDao {
         try {
             tx.begin();
             Person person = session.get(Person.class, personChanges.getId());
+            if (person == null) {
+                throw new RuntimeException("ID_NOT_EXIST");
+            }
             person.setEmail(personChanges.getEmail());
             if (personChanges.getFirstname() != null) {
                 person.setFirstname(personChanges.getFirstname());
@@ -83,21 +86,26 @@ public class HibernatePersonDao implements PersonDao {
     }
 
     @Override
-    public void delete(long personId) {
+    public Person delete(long personId) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.getTransaction();
         try {
             tx.begin();
             Person person = session.get(Person.class, personId);
+            if (person == null) {
+                throw new RuntimeException("ID_NOT_EXIST");
+            }
+            Person personClone = new Person(person);
             List<Person> friends = person.getFriends();
             for (Person friend : friends) {
-                friends.remove(friend);
                 friend.getFriends().remove(person);
                 session.update(friend);
             }
+            friends.clear();
             session.update(person);
             session.delete(person);
             tx.commit();
+            return personClone;
         } catch (RuntimeException e) {
             tx.rollback();
             throw e;
@@ -111,11 +119,10 @@ public class HibernatePersonDao implements PersonDao {
         Session session = sessionFactory.openSession();
         try {
             Person person = session.get(Person.class, personId);
-            if (person != null) {
-                return person;
-            } else {
-                throw new RuntimeException();
+            if (person == null) {
+                throw new RuntimeException("ID_NOT_EXIST");
             }
+            return person;
         } finally {
             session.close();
         }

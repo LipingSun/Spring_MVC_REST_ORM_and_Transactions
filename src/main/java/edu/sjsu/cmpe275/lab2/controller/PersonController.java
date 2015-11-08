@@ -139,6 +139,9 @@ public class PersonController {
             Person updatedPerson = personDao.update(person);
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
         } catch (Exception e) {
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
@@ -149,8 +152,8 @@ public class PersonController {
     @ResponseBody
     public ResponseEntity<?> deletePerson(@PathVariable("id") long userId) {
         try {
-            personDao.delete(userId);
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            Person deletedPerson = personDao.delete(userId);
+            return new ResponseEntity<>(deletedPerson, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface PersonDao {
     void store(Person person);
 
-    void delete(long personId);
+    Person delete(long personId);
 
     Person findById(long personId);
 
