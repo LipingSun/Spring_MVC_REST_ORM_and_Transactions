@@ -35,7 +35,7 @@ public class PersonController {
         Person person = new Person(firstName, lastName, email);
         person.setDescription(params.get("description"));
         if (params.containsKey("friends")) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Cannot process 'friends' parameter", HttpStatus.BAD_REQUEST);
         }
         if (params.containsKey("street") && params.containsKey("city") &&
                 params.containsKey("state") && params.containsKey("zip")) {
@@ -53,7 +53,10 @@ public class PersonController {
             personDao.store(person);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            if (e.getMessage() != null && e.getMessage().equals("ORG_NOT_EXIST")) {
+                return new ResponseEntity<>("Organization does not exist", HttpStatus.BAD_REQUEST);
+            }
+            throw e;
         }
     }
 
@@ -65,7 +68,10 @@ public class PersonController {
             Person person = personDao.findById(userId);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            }
+            throw e;
         }
     }
 
@@ -76,7 +82,10 @@ public class PersonController {
             Person person = personDao.findById(userId);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            }
+            throw e;
         }
     }
 
@@ -97,8 +106,13 @@ public class PersonController {
             model.addAttribute("friends", person.getFriendsString());
             return "person";
         } catch (Exception e) {
-            model.addAttribute("errorCode", 404);
-            model.addAttribute("errorMessage", e.toString());
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                model.addAttribute("errorCode", 404);
+                model.addAttribute("errorMessage", "ID does not exist");
+            } else {
+                model.addAttribute("errorCode", 500);
+                model.addAttribute("errorMessage", e.toString());
+            }
             return "error";
         }
     }
@@ -114,7 +128,7 @@ public class PersonController {
         person.setId(userId);
         person.setDescription(params.get("description"));
         if (params.containsKey("friends")) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Cannot process 'friends' parameter", HttpStatus.BAD_REQUEST);
         }
         if (params.containsKey("firstname")) {
             person.setFirstname(params.get("firstname"));
@@ -139,10 +153,14 @@ public class PersonController {
             Person updatedPerson = personDao.update(person);
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (e.getMessage() != null) {
+                if (e.getMessage().equals("ID_NOT_EXIST")) {
+                    return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                } else if (e.getMessage().equals("ORG_NOT_EXIST")) {
+                    return new ResponseEntity<>("Organization does not exist", HttpStatus.BAD_REQUEST);
+                }
             }
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            throw e;
         }
 
     }
@@ -155,7 +173,10 @@ public class PersonController {
             Person deletedPerson = personDao.delete(userId);
             return new ResponseEntity<>(deletedPerson, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            }
+            throw e;
         }
     }
 }
