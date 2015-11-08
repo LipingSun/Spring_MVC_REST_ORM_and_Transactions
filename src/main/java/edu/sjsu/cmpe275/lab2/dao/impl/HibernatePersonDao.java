@@ -31,7 +31,7 @@ public class HibernatePersonDao implements PersonDao {
                 if (org != null) {
                     person.setOrganization(org);
                 } else {
-                    throw new RuntimeException();
+                    throw new RuntimeException("ORG_NOT_EXIST");
                 }
             }
             session.save(person);
@@ -71,7 +71,7 @@ public class HibernatePersonDao implements PersonDao {
                 if (org != null) {
                     person.setOrganization(org);
                 } else {
-                    throw new RuntimeException();
+                    throw new RuntimeException("ORG_NOT_EXIST");
                 }
             }
             session.update(person);
