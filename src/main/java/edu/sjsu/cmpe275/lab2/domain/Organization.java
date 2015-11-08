@@ -7,7 +7,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "ORGANIZATION")
@@ -31,16 +31,12 @@ public class Organization {
     private List<Person> persons;
 
     public Organization() {
+        this.persons = new ArrayList<>();
     }
 
     public Organization(String name) {
         this.name = name;
-    }
-
-    public Organization(String name, String description, Address address) {
-        this.name = name;
-        this.description = description;
-        this.address = address;
+        this.persons = new ArrayList<>();
     }
 
     public long getId() {
