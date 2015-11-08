@@ -24,7 +24,7 @@ public class HibernatePersonDaoTest {
     public void testStore() throws Exception {
         Address address = new Address("street", "city", "state", "95555");
         Organization org = hibernateOrganizationDao.findById(1);
-        Person person = new Person("Jan", "Frank", "email@gmail.com", "desc", address, org);
+        Person person = new Person("Jan", "Frank", "email@gmail.com");
         hibernatePersonDao.store(person);
     }
 

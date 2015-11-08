@@ -18,7 +18,7 @@ public class HibernateOrganizationDaoTest {
     @Test
     public void testStore() throws Exception {
         Address address = new Address("street", "city", "state", "95555");
-        Organization org = new Organization("org", "des", address);
+        Organization org = new Organization("org");
         hibernateOrganizationDao.store(org);
     }
 
