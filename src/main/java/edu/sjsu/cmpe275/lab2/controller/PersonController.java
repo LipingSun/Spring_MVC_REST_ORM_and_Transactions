@@ -89,9 +89,11 @@ public class PersonController {
             model.addAttribute("email", person.getEmail());
             model.addAttribute("description", person.getDescription());
             model.addAttribute("address", person.getAddressString());
-            model.addAttribute("orgName", person.getOrganization().getName());
-            model.addAttribute("orgDescription", person.getOrganization().getDescription());
-            model.addAttribute("orgAddress", person.getOrganization().getAddressString());
+            if (person.getOrganization() != null) {
+                model.addAttribute("orgName", person.getOrganization().getName());
+                model.addAttribute("orgDescription", person.getOrganization().getDescription());
+                model.addAttribute("orgAddress", person.getOrganization().getAddressString());
+            }
             model.addAttribute("friends", person.getFriendsString());
             return "person";
         } catch (Exception e) {
