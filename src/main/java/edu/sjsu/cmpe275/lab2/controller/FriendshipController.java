@@ -27,9 +27,9 @@ public class FriendshipController {
         try {
             friendshipDao.create(userId1, userId2);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>("Friend added", HttpStatus.OK);
     }
 
     /* ---------------------------------------------- Remove a friend ---------------------------------------------- */
@@ -39,8 +39,8 @@ public class FriendshipController {
         try {
             friendshipDao.delete(userId1, userId2);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>("Friend removed", HttpStatus.OK);
     }
 }
