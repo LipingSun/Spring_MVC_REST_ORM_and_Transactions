@@ -7,7 +7,7 @@ import java.util.List;
 public interface OrganizationDao {
     void store(Organization organization);
 
-    void delete(long orgId);
+    Organization delete(long orgId);
 
     Organization findById(long orgId);
 
