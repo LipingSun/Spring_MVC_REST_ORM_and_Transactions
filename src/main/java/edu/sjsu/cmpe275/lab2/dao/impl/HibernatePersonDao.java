@@ -110,7 +110,12 @@ public class HibernatePersonDao implements PersonDao {
     public Person findById(long personId) {
         Session session = sessionFactory.openSession();
         try {
-            return session.get(Person.class, personId);
+            Person person = session.get(Person.class, personId);
+            if (person != null) {
+                return person;
+            } else {
+                throw new RuntimeException();
+            }
         } finally {
             session.close();
         }
