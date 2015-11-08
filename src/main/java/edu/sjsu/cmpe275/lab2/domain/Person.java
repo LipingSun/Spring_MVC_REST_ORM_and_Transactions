@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "PERSON")
@@ -41,29 +41,14 @@ public class Person {
 
 
     public Person() {
+        this.friends = new ArrayList<>();
     }
 
     public Person(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
-    }
-
-    public Person(String firstname, String lastname, String email, String description, Address address) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.description = description;
-        this.address = address;
-    }
-
-    public Person(String firstname, String lastname, String email, String description, Address address, Organization org) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.description = description;
-        this.address = address;
-        this.org = org;
+        this.friends = new ArrayList<>();
     }
 
     public long getId() {
