@@ -116,6 +116,12 @@ public class PersonController {
         if (params.containsKey("friends")) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+        if (params.containsKey("firstname")) {
+            person.setFirstname(params.get("firstname"));
+        }
+        if (params.containsKey("lastname")) {
+            person.setLastname((params.get("lastname")));
+        }
         if (params.containsKey("street") && params.containsKey("city") &&
                 params.containsKey("state") && params.containsKey("zip")) {
             Address address = new Address(params.get("street"), params.get("city"),
