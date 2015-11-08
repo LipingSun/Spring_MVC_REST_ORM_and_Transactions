@@ -23,7 +23,7 @@ public class OrganizationController {
         organizationDao = new HibernateOrganizationDao();
     }
 
-    /* -------------------------------------------- Create a org -------------------------------------------- */
+    /* -------------------------------------------- Create an org -------------------------------------------- */
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createOrganization(@RequestParam("name") String name,
@@ -42,7 +42,7 @@ public class OrganizationController {
         return new ResponseEntity<>(org, HttpStatus.OK);
     }
 
-    /* ---------------------------------------------- Get a org ---------------------------------------------- */
+    /* ---------------------------------------------- Get an org ---------------------------------------------- */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getOrganizationJSON(@PathVariable("id") long orgId) {
@@ -80,7 +80,7 @@ public class OrganizationController {
         }
     }
 
-    /* -------------------------------------------- Update a org -------------------------------------------- */
+    /* -------------------------------------------- Update an org -------------------------------------------- */
     @RequestMapping(value = "{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateOrganization(@PathVariable("id") long orgId,
@@ -101,7 +101,7 @@ public class OrganizationController {
         return new ResponseEntity<>(updatedOrg, HttpStatus.OK);
     }
 
-    /* ---------------------------------------------- Delete a org ---------------------------------------------- */
+    /* ---------------------------------------------- Delete an org ---------------------------------------------- */
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteOrganization(@PathVariable("id") long orgId) {
@@ -109,7 +109,7 @@ public class OrganizationController {
             organizationDao.delete(orgId);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
-            if (e.getMessage().equals("ORG_NOT_EMPTY")) {
+            if (e.getMessage() != null && e.getMessage().equals("ORG_NOT_EMPTY")) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

@@ -66,6 +66,9 @@ public class HibernateOrganizationDao implements OrganizationDao {
         try{
             tx.begin();
             Organization org = session.get(Organization.class, orgId);
+            if (org == null) {
+                throw new RuntimeException();
+            }
             if (org.getPersons().isEmpty()) {
                 session.delete(org);
             } else {
