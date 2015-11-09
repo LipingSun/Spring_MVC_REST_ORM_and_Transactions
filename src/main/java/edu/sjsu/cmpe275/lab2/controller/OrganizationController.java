@@ -34,7 +34,6 @@ public class OrganizationController {
      * @param params optional fields of organization
      * @return created organization in JSON format
      */
-    /* -------------------------------------------- Create an org -------------------------------------------- */
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createOrganization(@RequestParam("name") String name,
@@ -123,7 +122,6 @@ public class OrganizationController {
      * @param params organization fields to be updated
      * @return updated organization in JSON format
      */
-    /* -------------------------------------------- Update an org -------------------------------------------- */
     @RequestMapping(value = "{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateOrganization(@PathVariable("id") long orgId,
