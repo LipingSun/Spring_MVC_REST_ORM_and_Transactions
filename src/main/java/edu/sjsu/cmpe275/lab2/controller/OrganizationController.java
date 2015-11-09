@@ -20,12 +20,12 @@ public class OrganizationController {
 
     private OrganizationDao organizationDao;
     private ErrorMessage IdNotExistErrorMessage;
-    private ErrorMessage OrgNotExistErrorMessage;
+    private ErrorMessage OrgNotEmptyErrorMessage;
 
     public OrganizationController() {
         organizationDao = new HibernateOrganizationDao();
         IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
-        OrgNotExistErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "ORG does not exist");
+        OrgNotEmptyErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Organization is not empty");
     }
 
     /* -------------------------------------------- Create an org -------------------------------------------- */
@@ -136,7 +136,7 @@ public class OrganizationController {
                 if (e.getMessage().equals("ID_NOT_EXIST")) {
                     return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
                 } else if (e.getMessage().equals("ORG_NOT_EMPTY")) {
-                    return new ResponseEntity<>(OrgNotExistErrorMessage, HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(OrgNotEmptyErrorMessage, HttpStatus.BAD_REQUEST);
                 }
             }
             throw e;

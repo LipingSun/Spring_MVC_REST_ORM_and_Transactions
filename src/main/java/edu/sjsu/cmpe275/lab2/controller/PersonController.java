@@ -26,7 +26,7 @@ public class PersonController {
     public PersonController() {
         personDao = new HibernatePersonDao();
         IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
-        OrgNotExistErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "ORG does not exist");
+        OrgNotExistErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Organization does not exist");
     }
 
 
