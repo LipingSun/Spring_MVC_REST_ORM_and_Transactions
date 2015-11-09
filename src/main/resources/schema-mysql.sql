@@ -21,7 +21,7 @@ CREATE TABLE `PERSON` (
   `person_id`   INT(11) NOT NULL AUTO_INCREMENT,
   `firstname`   VARCHAR(45)      DEFAULT NULL,
   `lastname`    VARCHAR(45)      DEFAULT NULL,
-  `email`       VARCHAR(45)      DEFAULT NULL,
+  `email`       VARCHAR(45)      DEFAULT NULL UNIQUE,
   `description` VARCHAR(45)      DEFAULT NULL,
   `street`      VARCHAR(45)      DEFAULT NULL,
   `city`        VARCHAR(45)      DEFAULT NULL,

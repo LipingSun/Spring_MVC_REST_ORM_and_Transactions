@@ -6,6 +6,7 @@ import edu.sjsu.cmpe275.lab2.domain.Address;
 import edu.sjsu.cmpe275.lab2.domain.ErrorMessage;
 import edu.sjsu.cmpe275.lab2.domain.Organization;
 import edu.sjsu.cmpe275.lab2.domain.Person;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,13 @@ public class PersonController {
     private PersonDao personDao;
     private ErrorMessage IdNotExistErrorMessage;
     private ErrorMessage OrgNotExistErrorMessage;
+    private ErrorMessage emailConstraintErrorMessage;
 
     public PersonController() {
         personDao = new HibernatePersonDao();
         IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
         OrgNotExistErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Organization does not exist");
+        emailConstraintErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Email is used");
     }
 
 
@@ -57,6 +60,8 @@ public class PersonController {
         try {
             personDao.store(person);
             return new ResponseEntity<>(person, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(emailConstraintErrorMessage, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ORG_NOT_EXIST")) {
                 return new ResponseEntity<>(OrgNotExistErrorMessage, HttpStatus.BAD_REQUEST);
@@ -73,9 +78,9 @@ public class PersonController {
             Person person = personDao.findById(userId);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
-            }
+            //if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+            //    return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
+            //}
             throw e;
         }
     }
@@ -157,6 +162,8 @@ public class PersonController {
         try {
             Person updatedPerson = personDao.update(person);
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(emailConstraintErrorMessage, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             if (e.getMessage() != null) {
                 if (e.getMessage().equals("ID_NOT_EXIST")) {
