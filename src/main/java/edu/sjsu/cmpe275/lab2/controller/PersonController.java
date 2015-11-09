@@ -33,7 +33,14 @@ public class PersonController {
     }
 
 
-    /* -------------------------------------------- Create a person -------------------------------------------- */
+    /**
+     * Create a person
+     * @param firstName first name of person
+     * @param lastName last name of person
+     * @param email E-mail of person
+     * @param params optional fields of person
+     * @return created person in JSON format
+     */
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createPerson(@RequestParam("firstname") String firstName,
@@ -70,7 +77,11 @@ public class PersonController {
         }
     }
 
-    /* ---------------------------------------------- Get a person ---------------------------------------------- */
+    /**
+     * Get a person in JSON format
+     * @param userId id of person
+     * @return person in JSON format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getPersonJSON(@PathVariable("id") long userId) {
@@ -78,13 +89,18 @@ public class PersonController {
             Person person = personDao.findById(userId);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
-            //if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-            //    return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
-            //}
+            if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
+            }
             throw e;
         }
     }
 
+    /**
+     * Get a person in XML format
+     * @param userId id of person
+     * @return person in XML format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, params = "format=xml", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     public ResponseEntity<?> getPersonXML(@PathVariable("id") long userId) {
@@ -99,6 +115,11 @@ public class PersonController {
         }
     }
 
+    /**
+     * Get a person in HTML format
+     * @param userId id of person
+     * @return person in HTML format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, params = "format=html")
     public String getPersonHTML(@PathVariable("id") long userId, Model model) {
         try {
@@ -127,7 +148,13 @@ public class PersonController {
         }
     }
 
-    /* -------------------------------------------- Update a person -------------------------------------------- */
+    /**
+     * Update a person
+     * @param userId id of person
+     * @param email E-mail of person
+     * @param params person fields to be updated
+     * @return updated person in JSON format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updatePerson(@PathVariable("id") long userId,
@@ -177,7 +204,11 @@ public class PersonController {
 
     }
 
-    /* ---------------------------------------------- Delete a person ---------------------------------------------- */
+    /**
+     * Delete a person
+     * @param userId id of person
+     * @return deleted person in JSON format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deletePerson(@PathVariable("id") long userId) {

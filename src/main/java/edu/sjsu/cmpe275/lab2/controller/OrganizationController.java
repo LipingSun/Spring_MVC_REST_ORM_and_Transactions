@@ -28,6 +28,12 @@ public class OrganizationController {
         OrgNotEmptyErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Organization is not empty");
     }
 
+    /**
+     * Create an organization
+     * @param name name of organization
+     * @param params optional fields of organization
+     * @return created organization in JSON format
+     */
     /* -------------------------------------------- Create an org -------------------------------------------- */
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -46,7 +52,11 @@ public class OrganizationController {
         return new ResponseEntity<>(org, HttpStatus.OK);
     }
 
-    /* ---------------------------------------------- Get an org ---------------------------------------------- */
+    /**
+     * Get an organization in JSON format
+     * @param orgId id of organization
+     * @return Organization in JSON format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getOrganizationJSON(@PathVariable("id") long orgId) {
@@ -61,6 +71,11 @@ public class OrganizationController {
         }
     }
 
+    /**
+     * Get an organization in XML format
+     * @param orgId id of organization
+     * @return Organization in XML format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, params = "format=xml", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     public ResponseEntity<?> getOrganizationXML(@PathVariable("id") long orgId) {
@@ -76,6 +91,11 @@ public class OrganizationController {
         }
     }
 
+    /**
+     * Get an organization in HTML format
+     * @param orgId id of organization
+     * @return Organization in HTML format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, params = "format=html")
     public String getOrganizationHTML(@PathVariable("id") long orgId, Model model) {
         try {
@@ -96,6 +116,13 @@ public class OrganizationController {
         }
     }
 
+    /**
+     * Update an organization
+     * @param orgId id of organization
+     * @param name name of organization
+     * @param params organization fields to be updated
+     * @return updated organization in JSON format
+     */
     /* -------------------------------------------- Update an org -------------------------------------------- */
     @RequestMapping(value = "{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -124,7 +151,11 @@ public class OrganizationController {
 
     }
 
-    /* ---------------------------------------------- Delete an org ---------------------------------------------- */
+    /**
+     * Delete an organization
+     * @param orgId id of organization
+     * @return deleted organization in JSON format
+     */
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteOrganization(@PathVariable("id") long orgId) {

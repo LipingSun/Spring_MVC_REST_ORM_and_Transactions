@@ -23,7 +23,12 @@ public class FriendshipController {
         IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
     }
 
-    /* ----------------------------------------------- Add a friend ----------------------------------------------- */
+    /**
+     * Add a friend
+     * @param userId1 id of first person
+     * @param userId2 id of second person
+     * @return response of adding a friend
+     */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> addFriends(@PathVariable("id1") long userId1, @PathVariable("id2") long userId2) {
@@ -35,7 +40,12 @@ public class FriendshipController {
         return new ResponseEntity<>("Friend added", HttpStatus.OK);
     }
 
-    /* ---------------------------------------------- Remove a friend ---------------------------------------------- */
+    /**
+     * Remove a friend
+     * @param userId1 id of first person
+     * @param userId2 id of second person
+     * @return response of deleting a friend
+     */
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> removeFriends(@PathVariable("id1") long userId1, @PathVariable("id2") long userId2) {
