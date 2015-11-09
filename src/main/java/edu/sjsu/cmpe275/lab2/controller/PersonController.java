@@ -3,6 +3,7 @@ package edu.sjsu.cmpe275.lab2.controller;
 import edu.sjsu.cmpe275.lab2.dao.PersonDao;
 import edu.sjsu.cmpe275.lab2.dao.impl.HibernatePersonDao;
 import edu.sjsu.cmpe275.lab2.domain.Address;
+import edu.sjsu.cmpe275.lab2.domain.ErrorMessage;
 import edu.sjsu.cmpe275.lab2.domain.Organization;
 import edu.sjsu.cmpe275.lab2.domain.Person;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,13 @@ import java.util.Map;
 public class PersonController {
 
     private PersonDao personDao;
+    private ErrorMessage IdNotExistErrorMessage;
+    private ErrorMessage OrgNotExistErrorMessage;
 
     public PersonController() {
         personDao = new HibernatePersonDao();
+        IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
+        OrgNotExistErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "ORG does not exist");
     }
 
 
@@ -54,7 +59,7 @@ public class PersonController {
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ORG_NOT_EXIST")) {
-                return new ResponseEntity<>("Organization does not exist", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(OrgNotExistErrorMessage, HttpStatus.BAD_REQUEST);
             }
             throw e;
         }
@@ -69,7 +74,7 @@ public class PersonController {
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
             }
             throw e;
         }
@@ -83,7 +88,7 @@ public class PersonController {
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
             }
             throw e;
         }
@@ -155,9 +160,9 @@ public class PersonController {
         } catch (Exception e) {
             if (e.getMessage() != null) {
                 if (e.getMessage().equals("ID_NOT_EXIST")) {
-                    return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
                 } else if (e.getMessage().equals("ORG_NOT_EXIST")) {
-                    return new ResponseEntity<>("Organization does not exist", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(OrgNotExistErrorMessage, HttpStatus.BAD_REQUEST);
                 }
             }
             throw e;
@@ -174,7 +179,7 @@ public class PersonController {
             return new ResponseEntity<>(deletedPerson, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
             }
             throw e;
         }

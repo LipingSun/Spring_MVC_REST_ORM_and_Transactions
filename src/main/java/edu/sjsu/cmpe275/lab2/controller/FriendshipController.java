@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.lab2.controller;
 
 import edu.sjsu.cmpe275.lab2.dao.FriendshipDao;
 import edu.sjsu.cmpe275.lab2.dao.impl.HibernateFriendshipDao;
+import edu.sjsu.cmpe275.lab2.domain.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class FriendshipController {
 
     private FriendshipDao friendshipDao;
+    private ErrorMessage IdNotExistErrorMessage;
 
     public FriendshipController() {
         friendshipDao = new HibernateFriendshipDao();
+        IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
     }
 
     /* ----------------------------------------------- Add a friend ----------------------------------------------- */
@@ -27,7 +30,7 @@ public class FriendshipController {
         try {
             friendshipDao.create(userId1, userId2);
         } catch (Exception e) {
-            return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Friend added", HttpStatus.OK);
     }
@@ -39,7 +42,7 @@ public class FriendshipController {
         try {
             friendshipDao.delete(userId1, userId2);
         } catch (Exception e) {
-            return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Friend removed", HttpStatus.OK);
     }

@@ -3,6 +3,7 @@ package edu.sjsu.cmpe275.lab2.controller;
 import edu.sjsu.cmpe275.lab2.dao.OrganizationDao;
 import edu.sjsu.cmpe275.lab2.dao.impl.HibernateOrganizationDao;
 import edu.sjsu.cmpe275.lab2.domain.Address;
+import edu.sjsu.cmpe275.lab2.domain.ErrorMessage;
 import edu.sjsu.cmpe275.lab2.domain.Organization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,9 +19,13 @@ import java.util.Map;
 public class OrganizationController {
 
     private OrganizationDao organizationDao;
+    private ErrorMessage IdNotExistErrorMessage;
+    private ErrorMessage OrgNotExistErrorMessage;
 
     public OrganizationController() {
         organizationDao = new HibernateOrganizationDao();
+        IdNotExistErrorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), "ID does not exist");
+        OrgNotExistErrorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "ORG does not exist");
     }
 
     /* -------------------------------------------- Create an org -------------------------------------------- */
@@ -50,7 +55,7 @@ public class OrganizationController {
             return new ResponseEntity<>(org, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
             }
             throw e;
         }
@@ -64,7 +69,7 @@ public class OrganizationController {
             return new ResponseEntity<>(org, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
             } else {
                 throw e;
             }
@@ -112,7 +117,7 @@ public class OrganizationController {
             return new ResponseEntity<>(updatedOrg, HttpStatus.OK);
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ID_NOT_EXIST")) {
-                return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
             }
             throw e;
         }
@@ -129,9 +134,9 @@ public class OrganizationController {
         } catch (Exception e) {
             if (e.getMessage() != null) {
                 if (e.getMessage().equals("ID_NOT_EXIST")) {
-                    return new ResponseEntity<>("ID does not exist", HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(IdNotExistErrorMessage, HttpStatus.NOT_FOUND);
                 } else if (e.getMessage().equals("ORG_NOT_EMPTY")) {
-                    return new ResponseEntity<>("Organization is not empty", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(OrgNotExistErrorMessage, HttpStatus.BAD_REQUEST);
                 }
             }
             throw e;
